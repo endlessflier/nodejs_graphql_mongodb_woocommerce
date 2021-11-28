@@ -1,0 +1,10 @@
+{
+  "authSuperAdmin": {
+    "level": "superAdmin",
+    "permissions": ["auth"]
+  },
+  "adminLogin": {
+    "level": "tabletAdmin",
+    "permissions": ["auth"]
+  }
+}

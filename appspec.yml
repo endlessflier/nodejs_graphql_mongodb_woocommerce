@@ -1,0 +1,18 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ubuntu/mica-backend
+permissions:
+   - object: /home/ubuntu/mica-backend
+     pattern: "**"
+     owner: root
+     group: root
+     mode: 755
+     type:
+       - file 
+hooks:
+  ApplicationStart:
+    - location: scripts/app-start.sh
+
+    

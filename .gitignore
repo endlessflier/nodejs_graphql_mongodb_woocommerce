@@ -1,0 +1,12 @@
+
+# Dependency directories
+node_modules/
+.env.prod
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env
+.env.test
+.DS_Store
