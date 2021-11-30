@@ -6,7 +6,6 @@ import chargebee from 'chargebee'
 import recurlyApi from '../helpers/recurly';
 import adminRoutes from '../routes';
 var path = require('path');
-
  
 
 import {
@@ -33,10 +32,9 @@ import Sentry from "../config/sentry";
 import glob from "glob";
 import expressValidator from "express-validator";
 import { auth0 } from "../helpers/auth0Middleware";
+import { postgresClient } from "../database/db/postgresConnect";
 
 const app = express();
-const db  = require("../models");
-
 
 app.use(bodyParser.json({limit: '200mb'}));
 app.use(bodyParser.urlencoded({limit: '200mb', extended: true}));
@@ -112,16 +110,13 @@ DBConnect()
       introspection: false,
       playground: false,
     });
-
-    
-    
     
     server.applyMiddleware({ app });
     const httpServer = http.createServer(app);
 
     app.get("/test", (req, res) => {
       recurlyApi.checkoutPurchase()
-      res.status(200).json("server is working fine here");
+      res.status(200).json("server is working fine here..");
     });
 
     app.use(expressValidator());
@@ -150,7 +145,7 @@ DBConnect()
       );
     });
 
-    //db.sequelize.sync();
+    //postgresClient.init()
   })
   .catch((error) => {
     console.log("an error occured while starting DB  : ", error);

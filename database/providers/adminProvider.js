@@ -508,12 +508,12 @@ const setMaxAssignedOrders = async (_, params, { user }) => {
 };
 
 const updateAdminStatus = async (_, params, { user }) => {
-  try {
-    const currentUser = await user;
-    const { isOnline } = params;
+    try {
+        const currentUser = await user;
+        const { isOnline } = params;
         let admin = await adminSchema.findOne(
-      {
-        _id: currentUser._id,
+            {
+                _id: currentUser._id,
             }
         );
         admin.isOnline = true;
@@ -528,7 +528,7 @@ const updateAdminStatus = async (_, params, { user }) => {
         } else if (level === "level2") {
             adminLevel = "L1";
         }
-        if (!isOnline) {
+        if (isOnline) {
             // get maxAssignedOrders count pending Orders, by sort _id
             let pendingOrders = await orderSchema.find({status: `Tablet Admin ${adminLevel} - Assign Pending`}).sort(['_id', 1]).limit(maxAssignedOrders);
             console.log("error", pendingOrders);
@@ -537,8 +537,8 @@ const updateAdminStatus = async (_, params, { user }) => {
                     .findOneAndUpdate(
                         {
                             _id: pendingOrders[orderIndex]._id,
-      },
-      {
+                        },
+                        {
                             assigner: admin._id,
                             status: `Tablet Admin ${adminLevel}`,
                         }
@@ -551,15 +551,15 @@ const updateAdminStatus = async (_, params, { user }) => {
 
                 await pubsub.publish(ORDER_UPDATED, { order: order });
             }
-      }
-    return {
-      isOnline: isOnline,
-      success: true,
-      message: "successfully updated",
-      status: 200,
-    };
-  } catch (error) {
-    console.log("error", error);
+        }
+        return {
+            isOnline: isOnline,
+            success: true,
+            message: "successfully updated",
+            status: 200,
+        };
+    } catch (error) {
+        console.log("error", error);
 
     Sentry.captureException(error);
     throw new Error(error);
@@ -623,23 +623,23 @@ const updateOrderAssigner = async (_, params, { user }) => {
         if (admins && admins.length) {
             let assignerId = admins[0]._id;
 
-    let order = await orderSchema
-      .findOneAndUpdate(
-        {
-          _id: orderID,
-        },
-        {
+            let order = await orderSchema
+                .findOneAndUpdate(
+                    {
+                        _id: orderID,
+                    },
+                    {
                         assigner: assignerId,
-          status: `Tablet Admin ${adminLevel}`,
-        }
-      )
-      .populate("user_id")
-      .populate("address_id")
-      .populate("assigner");
+                        status: `Tablet Admin ${adminLevel}`,
+                    }
+                )
+                .populate("user_id")
+                .populate("address_id")
+                .populate("assigner");
 
             await updateAdminWorkLoad(assignerId);
 
-    await pubsub.publish(ORDER_UPDATED, { order: order });
+            await pubsub.publish(ORDER_UPDATED, { order: order });
         } else {
 
             await orderSchema

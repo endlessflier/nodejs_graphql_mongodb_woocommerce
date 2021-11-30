@@ -7,12 +7,9 @@ import {
   orderProvider,
   adminProvider,
   combinationProvider,
-  formulaProvider,
 } from "../../database";
 import IdScalers from "../scalers/objectId";
 import dateScalar from "../scalers/date";
-
-const { createNewFormula, getAllFormulas, deleteFormula, updateFormula, uploadFormulas } = formulaProvider;
 
 const {
   authSuperAdmin,
@@ -30,6 +27,9 @@ const {
   getLayoutThree,
   updateLayoutThree,
   fetchCustomers,
+  createNewFormula,
+  getAllFormulas,
+  uploadFormulas,
 } = superAminProvider;
 
 const { addProduct, getProducts, getListPlans } = productProvider;
@@ -81,7 +81,7 @@ const {
 const { getColorCode } = combinationProvider;
 
 export const ORDER_UPDATED = "ORDER_UPDATED";
- 
+
 const Resolvers = {
   Mutation: {
     getLoginSuperAdmin: (_, params, context) =>
@@ -93,8 +93,6 @@ const Resolvers = {
     createOrder: (_, params, context) => addOrder(_, params, context),
     createAdmin: (_, params, context) => addAdmin(_, params, context),
     createFormula: (_, params, context) => createNewFormula(_, params, context),
-    updateFormula: (_, params, context) => updateFormula(_, params, context),
-    deleteFormula: (_, params, context) => deleteFormula(_, params, context),
     uploadFormulas: (_, params, context) => uploadFormulas(_, params, context),
     adminForgetPassword:  (_, params, context) => adminForgetPassword(_, params, context),
     updateAdminStatus: (_, params, context) =>
@@ -138,13 +136,14 @@ const Resolvers = {
     allFormulas: (_, params, context) => getAllFormulas(_, params, context),
     getListPlans:(_, params, context) => getListPlans(_, params, context),
     getStorageFolders:(_, params, context) => getStorageFolders(_, params, context),
+
     getFilesInFolder:(_, params, context) => getFilesInFolder(_, params, context),
     allOrders: (_, params, context) => getOrders(_, params, context),
     fetchOrders: (_, params, context) => fetchOrders(_, params, context),
     allAdmins: (_, params, context) => getAdmins(_, params, context),
     userOrder: (_, params, context) => userOrders(_, params, context),
     getOrderShadeCode: (_, params, context) =>
-    getOrderShadeCode(_, params, context),
+      getOrderShadeCode(_, params, context),
     appSettings: (_, params, context) => getAppSettings(_, params, context),
     supportMessages: (_, params, context) => getMessages(_, params, context),
     getLayoutOne: (_, params, context) => getLayoutOne(_, params, context),

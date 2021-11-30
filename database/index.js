@@ -7,7 +7,6 @@ import orderProvider from "./providers/orderProvider";
 import adminProvider from "./providers/adminProvider";
 import combinationProvider from "./providers/combinationProvider"
 import brandFoundationProvider from "./providers/brandFoundationProvider"
-import formulaProvider from "./providers/formulaProvider"
 
 export {
   DBConnect,
@@ -18,6 +17,5 @@ export {
   orderProvider,
   adminProvider,
   combinationProvider,
-  brandFoundationProvider,
-  formulaProvider
+  brandFoundationProvider
 };

@@ -53,10 +53,6 @@ export const createSendleOrder = async (order = {}, user = {}, address = {}) => 
     });
 
     const json = await order.json();
-
-    if (!json.tracking_url) {
-      throw Error('Unknown error generating shipping label')
-    }
     
     return {
       trackingUrl: json?.tracking_url,
@@ -64,24 +60,6 @@ export const createSendleOrder = async (order = {}, user = {}, address = {}) => 
     }
   } catch (err) {
     console.log("Sendle Error", err);
-    Sentry.captureException(err);
-  }
-};
-
-export const getSendleLabel = async (url) => {
-  try {
-    const headers = new Headers();
-    headers.set('Authorization', 'Basic ' + Buffer.from(process.env.SENDLE_ID + ":" + process.env.SENDLE_API_KEY).toString('base64'));
-    headers.set('Content-Type', 'application/json')
-    headers.set('Accept', 'application/json')
-
-    const label = await fetch(url, {
-        method: "GET",
-        headers: headers,
-    });
-    
-    return label?.url
-  } catch (err) {
     Sentry.captureException(err);
   }
 };

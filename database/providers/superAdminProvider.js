@@ -11,6 +11,7 @@ import sgMailProvider from "../../config/sendgrid";
 import Sentry from "../../config/sentry";
 import permissions from "../../config/permissions.json";
 import User from "../schemas/User";
+import { postgresClient } from "../db/postgresConnect";
 
 // import {buildCSVFile} from "../../helpers/layoutThreeToCSV";
 
@@ -329,6 +330,75 @@ const downloadCustomers = async (_, params, context) => {
   }
 };
 
+const uploadFormulas = async (_, params, context) => {
+  try {
+    const formulas = JSON.parse(params.formulas)
+    await postgresClient.createMultipleFormulas(formulas)
+    return {
+      message: "Successfully Uploaded",
+      code: 200,
+      success: true,
+    };
+  } catch (error) {
+    console.info('error', error)
+    Sentry.captureException(error);
+    return {
+      message: error?.message,
+      code: 500,
+      success: false,
+    } 
+  }
+};
+
+
+const createNewFormula = async (_, params, context) => {
+  try {
+    let { code } = params;
+    const existingFormula = await postgresClient.getFormula(code)
+
+    if (existingFormula?.length) {
+      return {
+        message: 'The formula code provided already exists',
+        code: 500,
+        success: false,
+      }
+    }
+
+    await postgresClient.createFormula(params) 
+    return {
+      message: "Successfully Created",
+      code: 200,
+      success: true,
+    };
+  } catch (error) {
+    console.info('error', error)
+    Sentry.captureException(error);
+    return {
+      message: error?.message,
+      code: 500,
+      success: false,
+    } 
+  }
+};
+
+const getAllFormulas = async (_, params, context) => {
+  try {
+    const formulas = await postgresClient.queryAllFormulas()
+    return {
+      message: "Successfully queried formulas",
+      success: true,
+      code: JSON.stringify(formulas),
+    };
+  } catch (error) {
+    console.info('error', error)
+    Sentry.captureException(error);
+    return {
+      message: error?.message,
+      code: 500,
+      success: false,
+    } 
+  }
+};
 
 
 const superAminProvider = {
@@ -346,7 +416,10 @@ const superAminProvider = {
   addLayoutTwo,
   getLayoutThree,
   updateLayoutThree,
-  fetchCustomers
+  fetchCustomers,
+  createNewFormula,
+  getAllFormulas,
+  uploadFormulas,
 };
 
 export default superAminProvider;

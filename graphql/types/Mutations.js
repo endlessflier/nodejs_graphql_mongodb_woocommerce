@@ -4,9 +4,7 @@ const Mutations = `
     getLoginSuperAdmin(email:String!,password:String!):authResponse
     createProduct(name:String!,price:String!,image:String!):response
     createOrder(files:[String!],shadeCodes:[String!], subscriptionID:String!, planId: String!, shipping:orderFields! ):response
-    createFormula(code: String!,baseCode: String!,baseType: String!, base: String!, red: String!, yellow: String!, white: String!, green: String!, black: String!):response
-    updateFormula(code: String!,baseCode: String!,baseType: String!, base: String!, red: String!, yellow: String!, white: String!, green: String!, black: String!):response
-    deleteFormula(code: String!):response    
+    createFormula(code: String!, baseType: String!, base: String!, red: String!, yellow: String!, white: String!, green: String!, black: String!):response
     uploadFormulas(formulas: String!) : response
     register(email:String!,image:String,name:String!,password:String!):userResponse
     auth(email:String!,password:String!):loginResponse
